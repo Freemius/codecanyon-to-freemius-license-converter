@@ -58,6 +58,19 @@ class CTF_Api {
 	}  // end __construct;
 
 	/**
+	 * @return string
+	 */
+    private function get_source() {
+        if (! defined('FS__MIGRATION_SOURCE')) {
+            define('FS__MIGRATION_SOURCE', 'codecanyon');
+        }
+
+        return in_array(FS__MIGRATION_SOURCE, array('codecanyon', 'themeforest')) ?
+            FS__MIGRATION_SOURCE :
+            'codecanyon';
+    }
+
+	/**
 	 * Create new user in Freemius.
 	 *
 	 * @since 0.0.1
@@ -79,7 +92,8 @@ class CTF_Api {
 				'plugin_id'               => $this->freemius_plugin_id,
 				'send_verification_email' => false,
 				'is_verified'             => true,
-
+				'is_migration'            => true,
+				'source'                  => $this->get_source(),
 			));
 
 		} catch (Exception $e) {
@@ -113,7 +127,7 @@ class CTF_Api {
 				'expires_at'        => $this->freemius_plugin_expires_at,
 				'send_email'        => true,
 				'is_block_features' => true,
-				'source'            => 6
+				'source'            => $this->get_source(),
 			));
 
 		} catch (Exception $e) {
