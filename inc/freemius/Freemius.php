@@ -200,7 +200,7 @@
          * @param null $ch Initialized curl handle
          *
          * @return mixed
-         * @throws Freemius_Exception
+         * @throws CTF_Freemius_Exception
          */
         public function MakeRequest($pCanonizedPath, $pMethod = 'GET', $pParams = array(), $pFileParams = array(), $ch = null)
         {
@@ -310,7 +310,7 @@
 
             if ($result === false)
             {
-                $e = new Freemius_Exception(array(
+                $e = new CTF_Freemius_Exception(array(
                     'error' => array(
                         'code' => curl_errno($ch),
                         'message' => curl_error($ch),

@@ -116,7 +116,7 @@
 					$base = '/installs/' . $this->_id;
 					break;
 				default:
-					throw new Freemius_Exception('Scope not implemented.');
+					throw new CTF_Freemius_Exception('Scope not implemented.');
 			}
 
 			return '/v' . FS_API__VERSION . $base .
@@ -133,7 +133,7 @@
 			try {
 				$result = $this->MakeRequest($pPath, $pMethod, $pParams, $pFileParams);
 			}
-			catch (Freemius_Exception $e)
+			catch (CTF_Freemius_Exception $e)
 			{
 				// Map to error object.
 				$result = json_encode($e->getResult());
