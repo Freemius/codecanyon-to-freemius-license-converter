@@ -73,10 +73,6 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 		 * Initializes the plugin
 		 */
 		public function __construct() {
-
-			// Set the plugins_path
-			$this->plugins_path = plugin_dir_path(__DIR__);
-
 			// Load the text domain
 			load_plugin_textdomain('wu-ctf', false, dirname(plugin_basename(__FILE__)) . '/lang');
 

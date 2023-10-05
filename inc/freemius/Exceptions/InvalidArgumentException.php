@@ -1,2 +1,2 @@
 <?php
-    class CTF_Freemius_InvalidArgumentException extends Freemius_Exception { }
+    class CTF_Freemius_InvalidArgumentException extends CTF_Freemius_Exception { }
