@@ -75,9 +75,9 @@ define("FS__PLUGIN_PRICING_ID_PRODUCT_1", "90123");
 define("CODECANYON_SLUG_PLUGIN_PRODUCT_1", "my-plugin");
 ```
 
-Modify `get_constants_by_product` function to add more products if needed
+Modify `get_constants_by_product` function with your product slugs and add more products if needed
 
-Edit the `render_shortcode` function to add your product names
+Edit the `render_shortcode` function with your product slugs and names
 
 ## Adding the license migration form
 

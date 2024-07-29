@@ -209,8 +209,8 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 				'form_license_label'   => __('Enter your license key from CodeCanyon', 'np-ctf'),
 				'form_product_label'   => __('Select a product', 'np-ctf'),
 				'form_products'   		 => array(
-					'product_1' => __('Dinery', 'np-ctf'),
-					'product_2' => __('Margin', 'np-ctf')
+					'dinery' => __('Dinery', 'np-ctf'),
+					'margin' => __('Margin', 'np-ctf')
 				),
 				'form_button_label'    => __('Convert License', 'np-ctf'),
 				'form_success_message' => __('Confirmation email was successfully sent with your new access credentials and license key!', 'np-ctf'),
@@ -345,7 +345,7 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 			);
 
 			switch ($product) {
-        case 'product_1':
+				case 'dinery':
 					return array_merge( $defaults, array(
 						'freemius_plugin_id'     		 => defined("FS__PLUGIN_ID_PRODUCT_1") ? constant("FS__PLUGIN_ID_PRODUCT_1") : '',
 						'freemius_plugin_pk_apikey'  => defined("FS__PLUGIN_PK_APIKEY_PRODUCT_1") ? constant("FS__PLUGIN_PK_APIKEY_PRODUCT_1") : '',
@@ -354,7 +354,7 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 						'freemius_plugin_pricing_id' => defined("FS__PLUGIN_PRICING_ID_PRODUCT_1") ? constant("FS__PLUGIN_PRICING_ID_PRODUCT_1") : '',
 						'codecanyon_slug_plugin' 		 => defined("CODECANYON_SLUG_PLUGIN_PRODUCT_1") ? constant("CODECANYON_SLUG_PLUGIN_PRODUCT_1") : '',
 					) );
-        case 'product_2':
+				case 'margin':
 					return array_merge( $defaults, array(
 						'freemius_plugin_id'     		 => defined("FS__PLUGIN_ID_PRODUCT_2") ? constant("FS__PLUGIN_ID_PRODUCT_2") : '',
 						'freemius_plugin_pk_apikey'  => defined("FS__PLUGIN_PK_APIKEY_PRODUCT_2") ? constant("FS__PLUGIN_PK_APIKEY_PRODUCT_2") : '',
@@ -413,6 +413,7 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 				return;
 
 			} // end if;
+
 
 			// Check if the purchase code matches the selected product
 			if ( strtolower($license->product) !== $data['product'] ) {
