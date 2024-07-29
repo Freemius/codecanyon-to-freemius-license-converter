@@ -62,6 +62,23 @@ define("CODECANYON_API_KEY", "UNr.....");
 define("CODECANYON_SLUG_PLUGIN", "my-plugin");
 ```
 
+## Adding multiple products
+
+Add suffixes to the constants
+
+```
+define("FS__PLUGIN_ID_PRODUCT_1", "1234");
+define("FS__PLUGIN_PK_APIKEY_PRODUCT_1", "pk_abcde...");
+define("FS__PLUGIN_SK_APIKEY_PRODUCT_1", "sk_abcde...");
+define("FS__PLUGIN_PLAN_ID_PRODUCT_1", "5678");
+define("FS__PLUGIN_PRICING_ID_PRODUCT_1", "90123");
+define("CODECANYON_SLUG_PLUGIN_PRODUCT_1", "my-plugin");
+```
+
+Modify `get_constants_by_product` function to add more products if needed
+
+Edit the `render_shortcode` function to add your product names
+
 ## Adding the license migration form
 
 Create a new page with and with the following shortcode: `[ctf_form]`

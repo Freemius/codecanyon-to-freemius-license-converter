@@ -26,6 +26,18 @@
   </p>
 
   <p>
+    <label for="np-ctf-panel-product">
+		<?php echo $atts['form_product_label']; ?>:
+      <select id="np-ctf-panel-product" class="form-control form-control-lg" name="product" required>
+        <option value=""><?php echo $atts['form_product_label']; ?></option>
+        <?php foreach ( $atts['form_products'] as $slug => $product ) : ?>
+          <option value="<?php echo $slug; ?>"><?php echo $product; ?></option>
+        <?php endforeach; ?>
+      </select>
+    </label>
+  </p>
+
+  <p>
     <button class="button button-primary btn btn-primary" type="submit">
 		<?php echo $atts['form_button_label']; ?>
     </button>
