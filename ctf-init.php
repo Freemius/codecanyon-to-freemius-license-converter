@@ -38,6 +38,8 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 		 */
 		public $version = '0.0.1';
 
+		public $debug = false;
+
 		/**
 		 * WP_Error messages
 		 *
@@ -205,6 +207,11 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 				'id'                   => '1',
 				'form_email_label'     => __('Enter your email address', 'np-ctf'),
 				'form_license_label'   => __('Enter your license key from CodeCanyon', 'np-ctf'),
+				'form_product_label'   => __('Select a product', 'np-ctf'),
+				'form_products'   		 => array(
+					'dinery' => __('Dinery', 'np-ctf'),
+					'margin' => __('Margin', 'np-ctf')
+				),
 				'form_button_label'    => __('Convert License', 'np-ctf'),
 				'form_success_message' => __('Confirmation email was successfully sent with your new access credentials and license key!', 'np-ctf'),
 			), $atts, 'ctf_form');
@@ -291,7 +298,7 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 		 */
 		public function is_debug_mode() {
 
-			return isset($_GET['debug']) && $_GET['debug'] === 'SECRET!!!!';
+			return $this->debug;
 
 		} // end is_debug_mode;
 
@@ -322,28 +329,45 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 		 * Get ctf constants defined in wp-config.php
 		 *
 		 * @since 0.0.1
+		 * 
+		 * @param string $product Product.
 		 *
 		 * @return array
 		 */
-		public function get_constants_by_id() {
+		public function get_constants_by_product($product) {
 
-			return array(
+			$defaults = array(
 				'freemius_dev_pk_apikey'     => defined("FS__DEV_PK_APIKEY") ? constant("FS__DEV_PK_APIKEY") : '',
 				'freemius_dev_sk_apikey'     => defined("FS__DEV_SK_APIKEY") ? constant("FS__DEV_SK_APIKEY") : '',
 				'freemius_dev_id'            => defined("FS__DEV_ID") ? constant("FS__DEV_ID") : '',
-
-				'freemius_plugin_pk_apikey'  => defined("FS__PLUGIN_PK_APIKEY") ? constant("FS__PLUGIN_PK_APIKEY") : '',
-				'freemius_plugin_sk_apikey'  => defined("FS__PLUGIN_SK_APIKEY") ? constant("FS__PLUGIN_SK_APIKEY") : '',
-				'freemius_plugin_id'         => defined("FS__PLUGIN_ID") ? constant("FS__PLUGIN_ID") : '',
-				'freemius_plugin_plan_id'    => defined("FS__PLUGIN_PLAN_ID") ? constant("FS__PLUGIN_PLAN_ID") : '',
-				'freemius_plugin_pricing_id' => defined("FS__PLUGIN_PRICING_ID") ? constant("FS__PLUGIN_PRICING_ID") : '',
 				'freemius_plugin_expires_at' => defined("FS__PLUGIN_EXPIRES_AT") ? constant("FS__PLUGIN_EXPIRES_AT") : '',
-
 				'codecanyon_api_key'         => defined("CODECANYON_API_KEY") ? constant("CODECANYON_API_KEY") : '',
-				'codecanyon_slug_plugin'     => defined("CODECANYON_SLUG_PLUGIN") ? constant("CODECANYON_SLUG_PLUGIN") : '',
 			);
 
-		} // end get_constants_by_id;
+			switch ($product) {
+				case 'dinery':
+					return array_merge( $defaults, array(
+						'freemius_plugin_id'     		 => defined("FS__PLUGIN_ID_PRODUCT_1") ? constant("FS__PLUGIN_ID_PRODUCT_1") : '',
+						'freemius_plugin_pk_apikey'  => defined("FS__PLUGIN_PK_APIKEY_PRODUCT_1") ? constant("FS__PLUGIN_PK_APIKEY_PRODUCT_1") : '',
+						'freemius_plugin_sk_apikey'  => defined("FS__PLUGIN_SK_APIKEY_PRODUCT_1") ? constant("FS__PLUGIN_SK_APIKEY_PRODUCT_1") : '',
+						'freemius_plugin_plan_id'  	 => defined("FS__PLUGIN_PLAN_ID_PRODUCT_1") ? constant("FS__PLUGIN_PLAN_ID_PRODUCT_1") : '',
+						'freemius_plugin_pricing_id' => defined("FS__PLUGIN_PRICING_ID_PRODUCT_1") ? constant("FS__PLUGIN_PRICING_ID_PRODUCT_1") : '',
+						'codecanyon_slug_plugin' 		 => defined("CODECANYON_SLUG_PLUGIN_PRODUCT_1") ? constant("CODECANYON_SLUG_PLUGIN_PRODUCT_1") : '',
+					) );
+				case 'margin':
+					return array_merge( $defaults, array(
+						'freemius_plugin_id'     		 => defined("FS__PLUGIN_ID_PRODUCT_2") ? constant("FS__PLUGIN_ID_PRODUCT_2") : '',
+						'freemius_plugin_pk_apikey'  => defined("FS__PLUGIN_PK_APIKEY_PRODUCT_2") ? constant("FS__PLUGIN_PK_APIKEY_PRODUCT_2") : '',
+						'freemius_plugin_sk_apikey'  => defined("FS__PLUGIN_SK_APIKEY_PRODUCT_2") ? constant("FS__PLUGIN_SK_APIKEY_PRODUCT_2") : '',
+						'freemius_plugin_plan_id'  	 => defined("FS__PLUGIN_PLAN_ID_PRODUCT_2") ? constant("FS__PLUGIN_PLAN_ID_PRODUCT_2") : '',
+						'freemius_plugin_pricing_id' => defined("FS__PLUGIN_PRICING_ID_PRODUCT_2") ? constant("FS__PLUGIN_PRICING_ID_PRODUCT_2") : '',
+						'codecanyon_slug_plugin' 		 => defined("CODECANYON_SLUG_PLUGIN_PRODUCT_2") ? constant("CODECANYON_SLUG_PLUGIN_PRODUCT_2") : '',
+					) );
+        default:
+          return $defaults; // or throw an error
+    	}
+
+		} // end get_constants_by_product;
 
 		/**
 		 * Handle of form submit
@@ -365,9 +389,10 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 			$data = array(
 				'license_key' => $_POST['license_key'],
 				'email'       => $_POST['email'],
+				'product'     => $_POST['product'],
 			);
 
-			$data = array_merge($data, $this->get_constants_by_id());
+			$data = array_merge($data, $this->get_constants_by_product($data['product']));
 
 			if (!$this->validation($data)) {
 				return;
@@ -379,7 +404,6 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 
 			if ($this->is_debug_mode()) {
 
-
 			} // end if;
 
 			if (!$license || $license->success == false) {
@@ -389,6 +413,14 @@ if (!class_exists('Codecanyon_To_Freemius')) :
 				return;
 
 			} // end if;
+
+
+			// Check if the purchase code matches the selected product
+			if ( strtolower($license->product) !== $data['product'] ) {
+				$this->messages->add('invalid-product', __('The product does not match your purchase code.', 'np-ctf'));
+				CTF_Logger::add('ctf_log_error', implode('<br>', $this->messages->get_error_messages()));
+				return;
+			}
 
 			$existing_user = $ctf_api->verify_freemius_exists_user($data['email']);
 
