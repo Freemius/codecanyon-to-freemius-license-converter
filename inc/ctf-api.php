@@ -238,6 +238,7 @@ class CTF_Api {
 			return (object) array(
 				'success'       => isset($output->buyer),
 				'golden_ticket' => isset($output->buyer),
+				'product'				=> isset($output->item->wordpress_theme_metadata->theme_name) ? $output->item->wordpress_theme_metadata->theme_name : '',
 				'purchase'      => (object) array(
 					'refunded' => false,
 				)
