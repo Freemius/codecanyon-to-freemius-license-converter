@@ -85,11 +85,11 @@ class CTF_Api {
 
 		try {
 			// {plan_id: "4675", pricing_id: "3841", expires_at: "2099-08-22 03:00:00", send_email: true, email: "marcelo@wpultimo.com", period: 12}
-			$result = $api->Api('/plugins/plugin_id/users.json', 'POST', array(
+			$endpoint_path = "/plugins/{$this->freemius_plugin_id}/users.json";
+			$result = $api->Api($endpoint_path, 'POST', array(
 				'email'                   => $email,
 				'password'                => uniqid(rand()),
 				'name'                    => explode('@', $email)[0],
-				'plugin_id'               => $this->freemius_plugin_id,
 				'send_verification_email' => false,
 				'is_verified'             => true,
 				'is_migration'            => true,
@@ -119,11 +119,9 @@ class CTF_Api {
 
 		try {
 			// {plan_id: "4675", pricing_id: "3841", expires_at: "2099-08-22 03:00:00", send_email: true, email: "marcelo@wpultimo.com", period: 12}
-			$result = $api->Api('/plugins/plugin_id/plans/plan_id/pricing/pricing_id/licenses.json', 'POST', array(
+			$endpoint_path = "/plugins/{$this->freemius_plugin_id}/plans/{$this->freemius_plugin_plan_id}/pricing/{$this->freemius_plugin_pricing_id}/licenses.json";
+			$result = $api->Api($endpoint_path, 'POST', array(
 				'email'             => $email,
-				'plan_id'           => $this->freemius_plugin_plan_id,
-				'pricing_id'        => $this->freemius_plugin_pricing_id,
-				'plugin_id'         => $this->freemius_plugin_id,
 				'expires_at'        => $this->freemius_plugin_expires_at,
 				'send_email'        => true,
 				'is_block_features' => true,
@@ -205,9 +203,19 @@ class CTF_Api {
 	 *
 	 * @param array $code CodeCanyon License key.
 	 *
-	 * @return array
+	 * @return object
 	 */
 	public function verify_envato_purchase_code($code) {
+
+		if ( defined('FS__CTF_DEBUG') && FS__CTF_DEBUG ) {
+			return (object) array(
+				'success'       => true,
+				'golden_ticket' => true,
+				'purchase'      => (object) array(
+					'refunded' => false,
+				)
+			);
+		}
 
 		if (strlen($code) !== 36) {
 			return false;
@@ -234,16 +242,6 @@ class CTF_Api {
 		$output = json_decode(wp_remote_retrieve_body($response));
 
 		// Return output
-		if ( isset($output->buyer) ) {
-			return (object) array(
-				'success'       => isset($output->buyer),
-				'golden_ticket' => isset($output->buyer),
-				'purchase'      => (object) array(
-					'refunded' => false,
-				)
-			);
-		} // end if;
-
 		return (object) array(
 			'success'       => isset($output->buyer),
 			'golden_ticket' => isset($output->buyer),
